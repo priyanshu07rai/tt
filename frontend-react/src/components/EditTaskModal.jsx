@@ -1,22 +1,34 @@
 import { useState } from "react";
 import axiosInstance from "./axiosInstance";
 
+function EditTaskModal({
+
+    task,
+
+    tasks,
+
+    setTasks,
+
+    setShowEdit
+
+}){
+
+    const [taskName, setTaskName] =
+        useState(task.Task_Name);
+
+    const [description, setDescription] =
+        useState(task.Task_Description);
+
+    const [status, setStatus] =
+        useState(task.status);
+
+    const [dueTime, setDueTime] =
+        useState(task.due_time);
 
 
-function AddTaskModal({ setShowModal, tasks, setTasks }) {
+    async function handleUpdate() {
 
-    const [taskName, setTaskName] = useState("");
-
-    const [description, setDescription] = useState("");
-
-    const [status, setStatus] = useState("pending");
-
-    const [dueTime, setDueTime] = useState("");
-
-
-    async function handleSaveTask() {
-
-        const taskData = {
+        const updatedTask = {
 
             Task_Name: taskName,
 
@@ -30,31 +42,40 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
 
         try {
 
-            const response = await axiosInstance.post(
+            const response =
+                await axiosInstance.put(
 
-                "tasks/",
+                    `tasks/${task.id}/`,
 
-                taskData
+                    updatedTask
 
-            );
+                );
 
             setTasks(
 
-                [
+                tasks.map(
 
-                    ...tasks,
+                    item =>
 
-                    response.data
+                        item.id === task.id
 
-                ]
+                        ?
+
+                        response.data
+
+                        :
+
+                        item
+
+                )
 
             );
 
-            setShowModal(false);
+            setShowEdit(false);
 
         }
 
-        catch (error) {
+        catch(error) {
 
             console.log(error);
 
@@ -86,23 +107,11 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
                 "
             >
 
-                {/* Heading */}
-
                 <h1 className="text-3xl font-bold text-white">
 
-                    Add New Task
+                    Edit Task
 
                 </h1>
-
-                <p className="text-gray-400 mt-2">
-
-                    Create a task and stay productive.
-
-                </p>
-
-
-
-                {/* Inputs */}
 
                 <div className="flex flex-col gap-5 mt-8">
 
@@ -112,9 +121,9 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
 
                         value={taskName}
 
-                        onChange={(e) => setTaskName(e.target.value)}
-
-                        placeholder="Task Name"
+                        onChange={(e) =>
+                            setTaskName(e.target.value)
+                        }
 
                         className="
                         bg-[#111827]
@@ -123,18 +132,17 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
                         rounded-2xl
                         p-4
                         text-white
-                        outline-none
                         "
                     />
 
 
-
                     <textarea
+
                         value={description}
 
-                        onChange={(e) => setDescription(e.target.value)}
-
-                        placeholder="Description"
+                        onChange={(e) =>
+                            setDescription(e.target.value)
+                        }
 
                         rows="4"
 
@@ -145,57 +153,19 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
                         rounded-2xl
                         p-4
                         text-white
-                        outline-none
                         resize-none
                         "
                     />
 
 
+
                     <select
 
-                            value={status}
+                        value={status}
 
-                            onChange={(e) => setStatus(e.target.value)}
-
-                            className="
-                            bg-[#111827]
-                            border
-                            border-gray-700
-                            rounded-2xl
-                            p-4
-                            text-white
-                            outline-none
-                            "
-                        >
-
-                            <option value="pending">
-
-                                To Do
-
-                            </option>
-
-                            <option value="ongoing">
-
-                                In Progress
-
-                            </option>
-
-                            <option value="completed">
-
-                                Completed
-
-                            </option>
-
-                    </select>
-
-
-
-                    <input
-                        type="time"
-
-                        value={dueTime}
-
-                        onChange={(e) => setDueTime(e.target.value)}
+                        onChange={(e) =>
+                            setStatus(e.target.value)
+                        }
 
                         className="
                         bg-[#111827]
@@ -204,7 +174,48 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
                         rounded-2xl
                         p-4
                         text-white
-                        outline-none
+                        "
+                    >
+
+                        <option value="pending">
+
+                            To Do
+
+                        </option>
+
+                        <option value="ongoing">
+
+                            In Progress
+
+                        </option>
+
+                        <option value="completed">
+
+                            Completed
+
+                        </option>
+
+                    </select>
+
+
+
+                    <input
+
+                        type="time"
+
+                        value={dueTime || ""}
+
+                        onChange={(e) =>
+                            setDueTime(e.target.value)
+                        }
+
+                        className="
+                        bg-[#111827]
+                        border
+                        border-gray-700
+                        rounded-2xl
+                        p-4
+                        text-white
                         "
                     />
 
@@ -212,13 +223,11 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
 
 
 
-                {/* Buttons */}
-
                 <div className="flex justify-end gap-5 mt-8">
 
                     <button
 
-                        onClick={() => setShowModal(false)}
+                        onClick={() => setShowEdit(false)}
 
                         className="
                         bg-[#111827]
@@ -235,9 +244,11 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
 
                     </button>
 
+
+
                     <button
 
-                        onClick={handleSaveTask}
+                        onClick={handleUpdate}
 
                         className="
                         bg-purple-600
@@ -246,17 +257,21 @@ function AddTaskModal({ setShowModal, tasks, setTasks }) {
                         py-3
                         rounded-2xl
                         text-white
-                        font-semibold
                         "
-
                     >
 
-                        Save Task
+                        Save Changes
 
                     </button>
+
                 </div>
+
             </div>
+
         </div>
+
     )
+
 }
-export default AddTaskModal;
+
+export default EditTaskModal;

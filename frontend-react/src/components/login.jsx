@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
-    const [username, setUsername] = useState('')
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -352,24 +352,7 @@ const Login = () => {
                                         <div className="flex justify-between">
 
                                             <div className="flex gap-2">
-
-                                                <input type="checkbox"/>
-
-                                                <p className="text-gray-400">
-
-                                                    Remember Me
-
-                                                </p>
-
                                             </div>
-
-
-                                            <p className="text-purple-400 cursor-pointer">
-
-                                                Forgot Password?
-
-                                            </p>
-
                                         </div>
 
                                     }

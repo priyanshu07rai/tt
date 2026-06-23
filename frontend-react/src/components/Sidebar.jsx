@@ -56,7 +56,7 @@ function Sidebar() {
 
                 <h3 className="text-white text-2xl font-semibold">
 
-                    Priyanshu Rai
+                   WELCOME👋
 
                 </h3>
 

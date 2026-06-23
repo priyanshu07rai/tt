@@ -1,31 +1,12 @@
 import TaskItem from "./TaskItem";
+import { useState } from "react";
+import AddTaskModal from "./AddTaskModal";
 
-function TaskList() {
+function TaskList({ tasks, setTasks }) {
 
-    const tasks = [
+        const [showModal, setShowModal] = useState(false);
 
-        {
-            id: 1,
-            title: "API Integration",
-            status: "Completed",
-            time: "12:30 PM"
-        },
 
-        {
-            id: 2,
-            title: "Database Optimization",
-            status: "In Progress",
-            time: "2:00 PM"
-        },
-
-        {
-            id: 3,
-            title: "React Components",
-            status: "To Do",
-            time: "4:30 PM"
-        }
-
-    ];
 
 
     return (
@@ -63,6 +44,7 @@ function TaskList() {
                     rounded-2xl
                     font-semibold
                     "
+                    onClick={() => setShowModal(true)}
                 >
 
                     + Add Task
@@ -86,6 +68,11 @@ function TaskList() {
 
                             task={task}
 
+                            setTasks={setTasks}
+
+                            tasks={tasks}
+
+
                         />
 
                     ))
@@ -93,6 +80,19 @@ function TaskList() {
                 }
 
             </div>
+            {
+
+            showModal &&
+
+            <AddTaskModal
+
+            setShowModal={setShowModal}
+
+            tasks={tasks}
+
+            setTasks={setTasks} />}
+
+            
 
         </div>
 

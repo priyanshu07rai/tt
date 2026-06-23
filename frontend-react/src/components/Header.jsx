@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "../AuthProvider";
 import { useNavigate } from "react-router-dom";
 
-function Header() {
+
+function Header({ userData }) {
 
     const navigate = useNavigate();
 
@@ -20,6 +21,25 @@ function Header() {
 
     }
 
+        const today = new Date();
+
+        const currentDate =
+            today.toLocaleDateString(
+
+                "en-US",
+
+                {
+
+                    month: "long",
+
+                    day: "numeric",
+
+                    year: "numeric"
+
+                }
+
+            );
+
     return (
     <div className="flex justify-between items-center">
 
@@ -29,11 +49,11 @@ function Header() {
 
             <h1 className="text-5xl font-bold text-white">
 
-                Good morning,
+                hello,
 
                 <span className="text-purple-500">
 
-                    {" "}Priyanshu!
+                    {" "}{userData.username}!
 
                 </span>
 
@@ -68,7 +88,7 @@ function Header() {
 
                 <h3 className="text-white text-xl">
 
-                    May 19, 2025
+                    {currentDate}
 
                 </h3>
 
@@ -101,7 +121,6 @@ function Header() {
 
     </div>
         )
-
 }
 
 export default Header;

@@ -34,6 +34,14 @@ def register(request):
 @permission_classes([IsAuthenticated])
 def protected_view(request):
 
-    return Response({
-        'message':'Success'
-    })
+    return Response(
+
+        {
+
+            "username": request.user.username,
+
+            "email": request.user.email
+
+        }
+
+    )

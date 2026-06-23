@@ -1,4 +1,108 @@
-function TaskItem({ task }) {
+import axiosInstance from "./axiosInstance";
+import EditTaskModal from "./EditTaskModal";
+import { useState } from "react";
+
+function TaskItem({ task ,setTasks,tasks }) {
+
+    async function handleDelete() {
+
+        try {
+
+            await axiosInstance.delete(
+
+                `tasks/${task.id}/`
+
+            );
+
+            setTasks(
+
+                tasks.filter(
+
+                    item => item.id !== task.id
+
+                )
+
+            );
+
+        }
+
+        catch(error) {
+
+            console.log(error);
+
+        }
+
+    }
+
+    async function handleComplete() {
+
+        const updatedTask = {
+
+            Task_Name: task.Task_Name,
+
+            Task_Description: task.Task_Description,
+
+            status:
+
+                task.status === "completed"
+
+                ?
+
+                "pending"
+
+                :
+
+                "completed",
+
+            due_time: task.due_time
+
+        };
+
+
+        try {
+
+            const response =
+                await axiosInstance.put(
+
+                    `tasks/${task.id}/`,
+
+                    updatedTask
+
+                );
+
+
+            setTasks(
+
+                tasks.map(
+
+                    item =>
+
+                        item.id === task.id
+
+                        ?
+
+                        response.data
+
+                        :
+
+                        item
+
+                )
+
+            );
+
+        }
+
+        catch(error) {
+
+            console.log(error);
+
+        }
+
+    }
+
+    const [showEdit, setShowEdit] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
 
     return (
 
@@ -19,34 +123,95 @@ function TaskItem({ task }) {
 
             {/* Left Side */}
 
-            <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5">
 
-                <input
-                    type="checkbox"
-                    className="
-                    w-5
-                    h-5
-                    accent-purple-600
-                    "
-                />
+            <div>
 
-                <div>
+                <h3 className="text-white text-xl font-semibold">
 
-                    <h3 className="text-white text-xl font-semibold">
+                    {task.Task_Name}
 
-                        {task.title}
+                </h3>
 
-                    </h3>
 
-                    <p className="text-gray-400 mt-1">
+                {
 
-                        {task.time}
+                    task.Task_Description &&
+
+                    <p className="text-gray-500 text-sm mt-1">
+
+                        {task.Task_Description}
 
                     </p>
 
-                </div>
+                }
+
+
+                <p className="text-gray-400 text-sm mt-2">
+
+                    {
+
+                        task.due_time
+
+                        ?
+
+                        new Date(
+                            `1970-01-01T${task.due_time}`
+                        ).toLocaleTimeString(
+
+                            [],
+
+                            {
+
+                                hour: "numeric",
+
+                                minute: "2-digit"
+
+                            }
+
+                        )
+
+                        :
+
+                        ""
+
+                    }
+
+                </p>
+
+                {
+
+                    task.status === "completed"
+
+                    &&
+
+                    <p className="text-green-400 text-sm mt-2">
+
+                        Completed in
+
+                        {
+
+                            Math.floor(task.duration / 3600)
+
+                        }
+
+                        h
+
+                        {
+
+                            Math.floor((task.duration % 3600) / 60)
+
+                        }
+
+                        min
+
+                    </p>
+
+                }
 
             </div>
+
+        </div>
 
 
 
@@ -56,7 +221,7 @@ function TaskItem({ task }) {
 
                 {
 
-                    task.status === "Completed"
+                    task.status === "completed"
 
                     ?
 
@@ -76,7 +241,7 @@ function TaskItem({ task }) {
 
                     :
 
-                    task.status === "In Progress"
+                    task.status === "ongoing"
 
                     ?
 
@@ -112,22 +277,121 @@ function TaskItem({ task }) {
 
                 }
 
+                <div className="relative">
+
+                    <button
+
+                        className="
+                        text-gray-400
+                        text-3xl
+                        hover:text-white
+                        "
+
+                        onClick={() => setShowMenu(!showMenu)}
+
+                    >
+
+                        ⋮
+
+                    </button>
 
 
-                <button
-                    className="
-                    text-gray-400
-                    hover:text-white
-                    text-3xl
-                    "
-                >
 
-                    ⋮
+                    {
 
-                </button>
+                        showMenu &&
+
+                        <div
+
+                            className="
+                            absolute
+                            right-0
+                            top-12
+                            bg-[#111827]
+                            border
+                            border-gray-700
+                            rounded-xl
+                            w-40
+                            shadow-xl
+                            z-50
+                            "
+
+                        >
+
+                            <button
+
+                                className="
+                                block
+                                w-full
+                                text-left
+                                px-5
+                                py-3
+                                text-white
+                                hover:bg-[#1f2937]
+                                "
+
+                                onClick={() => {
+
+                                    setShowEdit(true);
+
+                                    setShowMenu(false);
+
+                                }}
+
+                            >
+
+                                Edit
+
+                            </button>
+
+
+
+                            <button
+
+                                className="
+                                block
+                                w-full
+                                text-left
+                                px-5
+                                py-3
+                                text-red-400
+                                hover:bg-[#1f2937]
+                                "
+
+                                onClick={handleDelete}
+
+                            >
+
+                                Delete
+
+                            </button>
+
+                        </div>
+
+                    }
+
+                </div>
+
+
 
             </div>
+                {
 
+                    showEdit &&
+
+                    <EditTaskModal
+
+                        task={task}
+
+                        tasks={tasks}
+
+                        setTasks={setTasks}
+
+                        setShowEdit={setShowEdit}
+
+                    />
+
+                }
         </div>
 
     )

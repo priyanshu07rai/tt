@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect , useState } from "react";
 import axiosInstance from "./axiosInstance";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
@@ -7,6 +7,9 @@ import TaskList from "./TaskList";
 import Timer from "./Timer";
 
 function Dashboard() {
+
+    const [tasks, setTasks] = useState([])
+    const [userData, setUserData] = useState({});
 
     useEffect(() => {
 
@@ -19,7 +22,7 @@ function Dashboard() {
                         "auth/protected-view/"
                     );
 
-                console.log(response.data);
+                setUserData(response.data);
 
             }
 
@@ -32,6 +35,83 @@ function Dashboard() {
         }
         fetchData();
     }, [])
+
+    useEffect(() => {
+
+        async function fetchTasks() {
+
+            try {
+
+                const response =
+                    await axiosInstance.get(
+
+                        "tasks/"
+
+                    );
+
+                setTasks(
+
+                    response.data
+
+                );
+
+            }
+
+            catch(error) {
+
+                console.log(error);
+
+            }
+
+        }
+
+        fetchTasks();
+
+    }, [])
+
+        const totalTasks = tasks.length;
+
+        const completedTasks =tasks.filter(task =>task.status === "completed").length;
+
+        const totalSeconds =
+
+        tasks
+
+        .filter(
+
+            task => task.status === "completed"
+
+        )
+
+        .reduce(
+
+            (sum, task) =>
+
+                sum + task.duration,
+
+            0
+
+        );
+
+
+        const hours =
+
+        Math.floor(
+
+            totalSeconds / 3600
+
+        );
+
+
+        const minutes =
+
+        Math.floor(
+
+            (totalSeconds % 3600) / 60
+
+        );
+
+        const pomodoros = completedTasks;
 
     return (
             <>
@@ -47,11 +127,23 @@ function Dashboard() {
 
                 {/* Header */}
 
-                <Header />
+                <Header  userData={userData} />
 
                 {/* Stats Cards */}
 
-                <StatsCard />
+            <StatsCard
+
+                totalTasks={totalTasks}
+
+                completedTasks={completedTasks}
+
+                hours={hours}
+
+                minutes={minutes}
+
+                pomodoros={pomodoros}
+
+            />
 
                 {/* Bottom Section */}
 
@@ -59,11 +151,11 @@ function Dashboard() {
 
                     {/* Task List */}
 
-                    <TaskList />
+                    <TaskList  tasks={tasks}  setTasks={setTasks} />
 
                     {/* Timer */}
 
-                    <Timer />
+                    <Timer     tasks={tasks}  setTasks={setTasks}/>
 
                 </div>
 

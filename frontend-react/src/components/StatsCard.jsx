@@ -1,4 +1,4 @@
-function StatsCard() {
+function StatsCard({ totalTasks,completedTasks,hours,minutes,pomodoros}) {
 
     return (
 
@@ -26,7 +26,7 @@ function StatsCard() {
 
                         <h1 className="text-white text-5xl font-bold mt-2">
 
-                            5
+                            {totalTasks}
 
                         </h1>
 
@@ -36,7 +36,7 @@ function StatsCard() {
 
                 <p className="text-gray-500 mt-6">
 
-                    3 completed
+                   {completedTasks} completed
 
                 </p>
 
@@ -66,19 +66,13 @@ function StatsCard() {
 
                         <h1 className="text-white text-5xl font-bold mt-2">
 
-                            2h 15m
+                            {hours}h {minutes}m
 
                         </h1>
 
                     </div>
 
                 </div>
-
-                <p className="text-green-400 mt-6">
-
-                    +12% from yesterday
-
-                </p>
 
             </div>
 
@@ -106,7 +100,7 @@ function StatsCard() {
 
                         <h1 className="text-white text-5xl font-bold mt-2">
 
-                            4
+                            {pomodoros}
 
                         </h1>
 
@@ -146,7 +140,7 @@ function StatsCard() {
 
                         <h1 className="text-white text-5xl font-bold mt-2">
 
-                            7
+                            0
 
                         </h1>
 
