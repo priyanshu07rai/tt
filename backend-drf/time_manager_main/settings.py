@@ -34,9 +34,9 @@ SECRET_KEY = "django-insecure-8vyqy6eibeznfz@p=vu3qfthx1xf#07t0v2#ggeeuy7fzz^4jy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://task-manager-with-pomodoro-timer.onrender.com']
-
-
+ALLOWED_HOSTS = [
+    "task-manager-api.onrender.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
