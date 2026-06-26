@@ -63,9 +63,10 @@ const Login = () => {
                 alert("Account created successfully , please login ");
                 setIsLogin(true);
             }
-            catch(error){
-                alert("Username already exists");
-            }
+            catch (error) {
+    console.log(error.response?.data);
+    alert(JSON.stringify(error.response?.data));
+}
         }
 
     return (
