@@ -38,10 +38,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     "task-manager-with-pomodoro-timer.onrender.com",
+    "tt-642g.onrender.com",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://task-manager-with-pomodoro-timer-1.onrender.com",
+    "https://time-manager-frontend-jmel.onrender.com",
 ]
 
 # Application definition
@@ -156,4 +158,5 @@ if not DEBUG:
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "https://task-manager-with-pomodoro-timer-1.onrender.com",
+    "https://time-manager-frontend-jmel.onrender.com",
 ]
