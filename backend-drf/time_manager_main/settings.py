@@ -138,5 +138,5 @@ STATIC_URL = "static/"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://task-manager-with-pomodoro-timer-1.onrender.com/",
+    "https://task-manager-with-pomodoro-timer-1.onrender.com",
 ]
