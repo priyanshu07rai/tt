@@ -32,4 +32,4 @@ class Tasks(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
     def __str__(self):
-        return self.Task_Name
+        return self.task_name
