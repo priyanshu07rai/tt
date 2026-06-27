@@ -46,125 +46,53 @@ function Timer({ tasks, setTasks }) {
 
 
 
-    async function handleStartStop() {
-
+    function handleStartStop() {
         if (!selectedTask) return;
 
         if (!isRunning) {
-
-            const currentTask =
-                tasks.find(
-                    item => item.id == selectedTask
-                );
-
+            const currentTask = tasks.find(item => item.id == selectedTask);
             const updatedTask = {
-
                 task_name: currentTask.task_name,
-
                 task_description: currentTask.task_description,
-
                 status: "ongoing",
-
                 due_time: currentTask.due_time,
-
                 duration: currentTask.duration
-
             };
 
-            const response =
-                await axiosInstance.put(
-
-                    `tasks/${selectedTask}/`,
-
-                    updatedTask
-
-                );
-
-            setTasks(
-
-                tasks.map(
-
-                    item =>
-
-                        item.id == selectedTask
-
-                            ?
-
-                            response.data
-
-                            :
-
-                            item
-
-                )
-
-            );
-
+            axiosInstance.put(`tasks/${selectedTask}/`, updatedTask)
+                .then(response => {
+                    setTasks(prevTasks => prevTasks.map(item => item.id == selectedTask ? response.data : item));
+                })
+                .catch(error => console.error(error));
         }
 
         setIsRunning(!isRunning);
-
     }
 
 
 
-    async function handleComplete() {
-
+    function handleComplete() {
         if (!selectedTask) return;
 
-        const currentTask =
-            tasks.find(
-                item => item.id == selectedTask
-            );
-
-        const updatedTask = {
-
-            task_name: currentTask.task_name,
-
-            task_description: currentTask.task_description,
-
-            status: "completed",
-
-            due_time: currentTask.due_time,
-
-            duration: seconds
-
-        };
-
-        const response =
-            await axiosInstance.put(
-
-                `tasks/${selectedTask}/`,
-
-                updatedTask
-
-            );
-
-
-        setTasks(
-
-            tasks.map(
-
-                item =>
-
-                    item.id == selectedTask
-
-                        ?
-
-                        response.data
-
-                        :
-
-                        item
-
-            )
-
-        );
+        const currentTask = tasks.find(item => item.id == selectedTask);
+        const finalSeconds = seconds;
 
         setIsRunning(false);
-
         setSeconds(0);
 
+        const updatedTask = {
+            task_name: currentTask.task_name,
+            task_description: currentTask.task_description,
+            status: "completed",
+            due_time: currentTask.due_time,
+            duration: finalSeconds
+        };
+
+        axiosInstance.put(`tasks/${selectedTask}/`, updatedTask)
+            .then(response => {
+                setTasks(prevTasks => prevTasks.map(item => item.id == selectedTask ? response.data : item));
+            })
+            .catch(error => console.error(error));
     }
 
 
