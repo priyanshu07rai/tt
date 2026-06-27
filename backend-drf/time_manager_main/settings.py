@@ -160,3 +160,16 @@ CORS_ALLOWED_ORIGINS = [
     "https://task-manager-with-pomodoro-timer-1.onrender.com",
     "https://time-manager-frontend-jmel.onrender.com",
 ]
+
+
+from django.contrib.auth.hashers import PBKDF2PasswordHasher
+class FastPBKDF2PasswordHasher(PBKDF2PasswordHasher):
+    iterations = 50000
+
+PASSWORD_HASHERS = [
+    'time_manager_main.settings.FastPBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
