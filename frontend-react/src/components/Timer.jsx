@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axiosInstance from "./axiosInstance";
 
 function Timer({ tasks, setTasks }) {
@@ -9,23 +9,20 @@ function Timer({ tasks, setTasks }) {
 
     const [isRunning, setIsRunning] = useState(false);
 
+    const startTimestampRef = useRef(null);
+    const baseSecondsRef = useRef(0);
 
     useEffect(() => {
-
         let interval;
-
         if (isRunning) {
-
+            startTimestampRef.current = Date.now();
+            baseSecondsRef.current = seconds;
             interval = setInterval(() => {
-
-                setSeconds(prev => prev + 1);
-
+                const elapsed = Math.floor((Date.now() - startTimestampRef.current) / 1000);
+                setSeconds(baseSecondsRef.current + elapsed);
             }, 1000);
-
         }
-
         return () => clearInterval(interval);
-
     }, [isRunning]);
 
 
