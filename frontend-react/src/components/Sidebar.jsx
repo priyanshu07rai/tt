@@ -2,7 +2,7 @@ function Sidebar() {
 
     return (
 
-        <div className="w-280px h-screen bg-[#081021] border-r border-gray-800 flex flex-col justify-between p-6">
+        <div className="w-[280px] h-screen sticky top-0 bg-[#081021] border-r border-gray-800 flex flex-col justify-between p-6">
 
             {/* Logo */}
 
